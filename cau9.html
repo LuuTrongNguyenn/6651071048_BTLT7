@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Validation Exercise</title>
+    <!-- Nhúng thư viện jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-container { width: 420px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9; }
+        .form-group { margin-bottom: 12px; }
+        label { display: inline-block; width: 160px; font-size: 14px; }
+        input[type="text"], select { width: 200px; padding: 4px; }
+        .required { color: red; }
+        .buttons { margin-top: 15px; text-align: center; }
+        .buttons input { padding: 6px 15px; margin: 0 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h3>Personal Information</h3>
+    <form id="regForm">
+        <div class="form-group">
+            <label>Name<span class="required">*</span>:</label>
+            <input type="text" id="name" class="required-field">
+        </div>
+
+        <div class="form-group">
+            <label>Sex<span class="required">*</span>:</label>
+            <input type="radio" name="sex" value="Male"> Male
+            <input type="radio" name="sex" value="Female"> Female
+        </div>
+
+        <div class="form-group">
+            <label>Email<span class="required">*</span>:</label>
+            <input type="text" id="email" class="required-field">
+        </div>
+
+        <div class="form-group">
+            <label>Enter birthday<br><small>(MM/DD/YYYY)</small><span class="required">*</span>:</label>
+            <input type="text" id="birthday" class="required-field">
+        </div>
+
+        <div class="form-group">
+            <label>Enter street address<br><small>(line 1)</small><span class="required">*</span>:</label>
+            <input type="text" id="address" class="required-field">
+        </div>
+
+        <div class="form-group">
+            <label>Enter city<span class="required">*</span>:</label>
+            <input type="text" id="city" class="required-field">
+        </div>
+
+        <div class="form-group">
+            <label>Select a region<span class="required">*</span>:</label>
+            <select id="region" class="required-field">
+                <option value="">-- Choose region --</option>
+                <option value="HN">Hà Nội</option>
+                <option value="HCM">TP. Hồ Chí Minh</option>
+                <option value="DN">Đà Nẵng</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Enter 5-digit ZIP code<span class="required">*</span>:</label>
+            <input type="text" id="zipcode" class="required-field">
+        </div>
+
+        <div class="buttons">
+            <input type="button" id="btnFinish" value="Finish">
+            <input type="button" id="btnClear" value="Clear">
+        </div>
+    </form>
+</div>
+
+<script>
+$(document).ready(function() {
+    // 1. Chức năng nút Clear: Xóa toàn bộ dữ liệu trên form
+    $('#btnClear').click(function() {
+        $('#regForm')[0].reset();
+    });
+
+    // 2. Chức năng nút Finish: Kiểm tra (validate) dữ liệu
+    $('#btnFinish').click(function() {
+        // --- 2.1 Kiểm tra các trường bắt buộc (có dấu *) ---
+        var name = $('#name').val().trim();
+        if (name === '') {
+            alert('Vui lòng nhập Name!');
+            $('#name').focus();
+            return;
+        }
+
+        if (!$('input[name="sex"]:checked').val()) {
+            alert('Vui lòng chọn Giới tính (Sex)!');
+            return;
+        }
+
+        var email = $('#email').val().trim();
+        if (email === '') {
+            alert('Vui lòng nhập Email!');
+            $('#email').focus();
+            return;
+        }
+
+        // --- 2.2 Validate Email ---
+        // Yêu cầu: Có 1 dấu @. Trước @ tối đa 1 dấu ".". Sau @ là domain có ít nhất 1 dấu "."
+        var atCount = (email.match(/@/g) || []).length;
+        if (atCount !== 1) {
+            alert('Email phải chứa đúng 1 ký tự @!');
+            $('#email').focus();
+            return;
+        }
+
+        var parts = email.split('@');
+        var account = parts[0];
+        var domain = parts[1];
+
+        var dotCountAccount = (account.match(/\./g) || []).length;
+        if (dotCountAccount > 1) {
+            alert('Tên account email (trước dấu @) chỉ được chứa tối đa 1 dấu chấm (.)!');
+            $('#email').focus();
+            return;
+        }
+
+        var dotCountDomain = (domain.match(/\./g) || []).length;
+        if (dotCountDomain < 1) {
+            alert('Tên domain email (sau dấu @) phải chứa ít nhất 1 dấu chấm (.)!');
+            $('#email').focus();
+            return;
+        }
+
+        // --- 2.3 Validate Ngày tháng năm sinh ---
+        // Định dạng mm/dd/yyyy hoặc mm-dd-yyyy

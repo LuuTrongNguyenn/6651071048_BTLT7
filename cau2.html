@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Return first and last name from a form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function getFormvalue() {
+            // Lấy giá trị từ các ô input thông qua name
+            var fname = $('input[name="fname"]').val();
+            var lname = $('input[name="lname"]').val();
+            
+            // Hiển thị thông báo giá trị vừa lấy
+            alert("First name: " + fname + "\nLast name: " + lname);
+            
+            // Ngăn form reload lại trang
+            return false;
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" onsubmit="return getFormvalue()">
+        First name: <input type="text" name="fname" value="David"><br>
+        Last name: <input type="text" name="lname" value="Beckham"><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

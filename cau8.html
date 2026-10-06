@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Máy tính đơn giản</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        input[type="text"] { width: 60px; text-align: center; }
+        input[type="button"] { width: 30px; margin: 0 2px; }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('.calc-btn').click(function() {
+                var num1 = parseFloat($('#num1').val());
+                var num2 = parseFloat($('#num2').val());
+                var op = $(this).val();
+                var result = 0;
+
+                if (isNaN(num1) || isNaN(num2)) {
+                    alert("Vui lòng nhập đầy đủ 2 số!");
+                    return;
+                }
+
+                switch(op) {
+                    case '+': result = num1 + num2; break;
+                    case '-': result = num1 - num2; break;
+                    case 'x': result = num1 * num2; break;
+                    case '/': 
+                        if (num2 === 0) {
+                            alert("Không thể chia cho 0!");
+                            return;
+                        }
+                        result = num1 / num2; 
+                        break;
+                    case '^': result = Math.pow(num1, num2); break;
+                }
+
+                $('#result').val(result);
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <input type="text" id="num1" value="12">
+    <input type="button" class="calc-btn" value="+">
+    <input type="button" class="calc-btn" value="-">
+    <input type="button" class="calc-btn" value="x">
+    <input type="button" class="calc-btn" value="/">
+    <input type="button" class="calc-btn" value="^">
+    <input type="text" id="num2" value="14">
+    =
+    <input type="text" id="result" readonly value="-2">
+
+</body>
+</html>
